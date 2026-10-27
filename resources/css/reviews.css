@@ -1,0 +1,331 @@
+/* =========================================================
+   Meinfenster24 – Review Cards
+   Farben abgeleitet aus style.css der Website
+   ========================================================= */
+
+:root {
+    --brand-dark:   #3F3F3F;
+    --brand-blue:   #1088cc;
+    --brand-bg:     #F3F4F6;
+    --brand-card:   #ffffff;
+    --brand-border: #eaeaea;
+    --brand-muted:  #929292;
+    --star-empty:   #e5e7eb;
+    --radius-sm:    10px;
+    --radius-lg:    20px;
+    --shadow:       0 1px 2px rgba(0,0,0,.04),
+    0 4px 16px rgba(0,0,0,.06);
+    --gutter:       24px;
+}
+
+/* =========================================================
+   Schriftart
+   -----------------------------------------------------------------
+   Datei muss unter resources/fonts/Manrope-VariableFont_wght.ttf
+   liegen. Alternativ nach public/fonts/ verschieben und URL auf
+   /fonts/Manrope-VariableFont_wght.ttf ändern.
+   ========================================================= */
+
+@font-face {
+    font-family: 'meine-schrift';
+    src: url('../fonts/Manrope-VariableFont_wght.ttf') format('truetype');
+    font-weight: 200 800;   /* Variable Font: alle Gewichte */
+    font-display: swap;     /* Text sofort sichtbar, dann Font-Swap */
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    font-family: 'meine-schrift', system-ui, -apple-system,
+    'Segoe UI', Roboto, Arial, sans-serif;
+    background: var(--brand-bg);
+    color: var(--brand-dark);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* =========================================================
+   Header
+   ========================================================= */
+
+.rv-header {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 24px 20px;
+}
+.rv-header-inner {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.rv-logo { height: 48px; width: auto; }
+.rv-header h1 {
+    font-size: clamp(1.75rem, 3vw, 2.75rem);
+    font-weight: 700;
+    margin: 0 0 4px;
+    letter-spacing: -0.02em;
+    color: var(--brand-dark);
+}
+.rv-header p {
+    color: var(--brand-muted);
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+/* =========================================================
+   Masonry-Container (CSS Columns)
+   ========================================================= */
+
+.rv-grid {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px 64px;
+
+    column-count: 3;
+    column-gap: var(--gutter);
+}
+
+/* =========================================================
+   Karte
+   ========================================================= */
+
+.rv-card {
+    display: block;
+    width: 100%;
+    margin: 0 0 var(--gutter);
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    page-break-inside: avoid;
+
+    background: var(--brand-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--brand-border);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+.rv-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(0,0,0,.10);
+}
+
+/* =========================================================
+   Bildbereich – volle Bildhöhe, kein Zuschnitt
+   ========================================================= */
+
+.rv-media {
+    position: relative;              /* Anker für Overlays */
+    width: 100%;
+    background: var(--brand-border);
+}
+.rv-media img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+/* =========================================================
+   Carousel-Steuerung
+   ========================================================= */
+
+/* Zähler oben rechts */
+.rv-media-counter {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.55);
+    color: #fff;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 999px;
+    backdrop-filter: blur(4px);
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* Pfeile links/rechts */
+.rv-media-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0, 0, 0, 0.45);
+    color: #fff;
+    font-size: 1.5rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    backdrop-filter: blur(4px);
+    z-index: 2;
+    transition: background 0.15s, opacity 0.15s;
+    opacity: 0;
+}
+.rv-media:hover .rv-media-arrow { opacity: 1; }
+.rv-media-arrow:hover { background: rgba(0, 0, 0, 0.7); }
+.rv-media-arrow--prev { left: 8px; }
+.rv-media-arrow--next { right: 8px; }
+
+/* Auf Touch-Geräten immer sichtbar */
+@media (hover: none) {
+    .rv-media-arrow { opacity: 0.9; }
+}
+
+/* Dots unten mittig */
+.rv-media-dots {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    padding: 5px 8px;
+    background: rgba(0, 0, 0, 0.45);
+    border-radius: 999px;
+    backdrop-filter: blur(4px);
+    z-index: 2;
+}
+.rv-media-dot {
+    appearance: none;
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.55);
+    cursor: pointer;
+    transition: background 0.15s, transform 0.15s;
+}
+.rv-media-dot:hover { background: rgba(255, 255, 255, 0.85); }
+.rv-media-dot.is-active {
+    background: #fff;
+    transform: scale(1.25);
+}
+
+/* =========================================================
+   Karteninneres
+   ========================================================= */
+
+.rv-body {
+    padding: 20px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+.rv-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.rv-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    background: var(--brand-border);
+}
+.rv-meta { min-width: 0; }
+.rv-name {
+    font-weight: 600;
+    font-size: 1rem;
+    margin: 0 0 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rv-stars { display: inline-flex; gap: 2px; }
+.rv-star  { width: 15px; height: 15px; fill: var(--star-empty); }
+.rv-star.is-filled { fill: var(--brand-blue); }
+
+.rv-text {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--brand-dark);
+    overflow-wrap: anywhere;
+}
+
+.rv-date {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--brand-muted);
+}
+
+/* =========================================================
+   Zustände
+   ========================================================= */
+
+.rv-error,
+.rv-empty {
+    padding: 16px;
+    border-radius: var(--radius-sm);
+    break-inside: avoid;
+}
+.rv-error { color: #b91c1c; background: #fee2e2; }
+.rv-empty {
+    text-align: center;
+    color: var(--brand-muted);
+    background: var(--brand-card);
+    border: 1px solid var(--brand-border);
+    border-radius: var(--radius-lg);
+    padding: 40px 16px;
+}
+
+/* =========================================================
+   Skeleton
+   ========================================================= */
+
+.rv-skeleton {
+    width: 100%;
+    margin: 0 0 var(--gutter);
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+
+    background: var(--brand-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--brand-border);
+    overflow: hidden;
+    animation: rv-pulse 1.4s ease-in-out infinite;
+}
+.rv-skeleton-media {
+    aspect-ratio: 16 / 10;
+    background: #eef0f2;
+}
+.rv-skeleton-body {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.rv-skeleton-line { height: 12px; background: #eef0f2; border-radius: 6px; }
+.rv-skeleton-line.is-short  { width: 40%; }
+.rv-skeleton-line.is-medium { width: 65%; }
+
+@keyframes rv-pulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: .55; }
+}
+
+/* =========================================================
+   Responsive
+   ========================================================= */
+
+@media (max-width: 1024px) {
+    .rv-grid { column-count: 2; }
+}
+
+@media (max-width: 640px) {
+    .rv-grid { column-count: 1; }
+
+    .rv-header { padding: 28px 16px 12px; }
+    .rv-header-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .rv-logo { height: 36px; }
+    .rv-body { padding: 16px 18px 20px; }
+}
